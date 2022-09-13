@@ -9,6 +9,10 @@ void restartclusters(double ** p, int n);
 void printAnErrorHasOccuredK();
 void printInvalidInputK();
 void readInputK(char *fileName, double **array);
+double DistanceK(double* x, double* y,int dim);
+void freeMatrixK(double** matrix, int rowNum);
+void nullMatrixK(int n, double ** p);
+
 /* define variables */
 
 int num_of_unchanged_centorids, max_iter,t, N, level = 0, K;
@@ -52,7 +56,7 @@ char* execute2(int k_new, int n,int dim, char* vectorsFile, char* centroidsFile)
                 old_centroid[g] = centroids[l][g];
             }
             updateCentroid(centroids, clusters, l, dim, n, vectorsK);
-            if (sqrt(Distance(old_centroid, centroids[l], dim)) < eps){
+            if (sqrt(DistanceK(old_centroid, centroids[l], dim)) < eps){
                 num_of_unchanged_centorids += 1;
                 }
             }
@@ -74,15 +78,15 @@ void freeFuncK() {
     free(old_centroid);
     
     if ((level >= 1) && (vectorsK != NULL)) {
-        freeMatrix(vectorsK, N);
+        freeMatrixK(vectorsK, N);
     }
     free(vectorsK);
     if ((level >= 2) && (centroids != NULL)) {
-        freeMatrix(centroids, K);
+        freeMatrixK(centroids, K);
     }
     free(centroids);
     if ((level >= 3) && (clusters != NULL)) {
-        freeMatrix(clusters, K);
+        freeMatrixK(clusters, K);
     }
     free(clusters);
     /* level 4 includes 3 if's and free(old_centroid) */
@@ -130,7 +134,7 @@ void assignVectorToCluster(double** vectorsK,double** centroids,double** cluster
     int r;
     double distance;
     for (i=0; i < K;++i){
-        distance = Distance(vectorsK[vectorIndex], centroids[i], dim);
+        distance = DistanceK(vectorsK[vectorIndex], centroids[i], dim);
         if (distance < min){
             min = distance;
             index = i;}}
@@ -179,7 +183,7 @@ double** matrixAllocK(int rowNum, int colNum) {
     if (p == NULL) {
         printAnErrorHasOccuredK();
     }
-    nullMatrix(rowNum, p);
+    nullMatrixK(rowNum, p);
     level +=1;
     for (i=0; i < rowNum; i++) {
         p[i] = (double*)malloc(colNum * sizeof(double));
@@ -218,4 +222,31 @@ void readInputK(char *fileName, double **array)
         }
     }
     fclose(fptr);
+}
+
+double shut_up(double x){
+    return x;
+}
+
+double DistanceK(double* x, double* y,int dim) {
+    double sumOfSquaredDiffrence = 0;
+    int i;
+    for (i=0; i < dim; ++i){
+        sumOfSquaredDiffrence += pow(x[i]-y[i],2);}
+    return sumOfSquaredDiffrence;
+}
+
+
+void freeMatrixK(double** matrix, int rowNum) {
+    int i;
+    for (i=0; i < rowNum; i++) {
+        free(matrix[i]);
+    }
+}
+
+void nullMatrixK(int n, double ** p) {
+    int i;
+    for (i = 0; i < n; i++) {
+        p[i] = NULL;
+    }
 }

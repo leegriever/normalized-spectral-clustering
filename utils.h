@@ -13,9 +13,7 @@
 
 /* methods */
 
-double Distance(double* x, double* y,int dim);
-void freeMatrix(double** matrix, int rowNum);
-void nullMatrix(int n, double ** p);
+
 
 #endif
 

@@ -43,6 +43,9 @@ void printInvalidInput();
 int compare_double(const void *p1, const void *p2);
 void writeToFile(char* outFileName, int k, int dim, double** centroids);
 void readInput(char *fileName, double **array);
+double DistanceS(double* x, double* y,int dim);
+void freeMatrix(double** matrix, int rowNum);
+void nullMatrix(int n, double ** p);
 
 /*The Normalized Spectral Clustering Algorithm*/
 SPK_INFO* execute1(int kToCheck, char *goal, char *filename){
@@ -184,7 +187,7 @@ void creat_W(double ** W, double **vectors, int numOfVec, int dim) {
     for (i1=0 ; i1<numOfVec;++i1){
         for (i2=0 ; i2<numOfVec;++i2){
             if (i1!=i2){
-                W[i1][i2]=exp((-sqrt(Distance(vectors[i1],vectors[i2],dim))/2));
+                W[i1][i2]=exp((-sqrt(DistanceS(vectors[i1],vectors[i2],dim))/2));
             }
             else{
                 W[i1][i2]=0;
@@ -642,6 +645,24 @@ void readInput(char *fileName, double **array)
     fclose(fptr);
 }
 
+double DistanceS(double* x, double* y,int dim) {
+    double sumOfSquaredDiffrence = 0;
+    int i;
+    for (i=0; i < dim; ++i){
+        sumOfSquaredDiffrence += pow(x[i]-y[i],2);}
+    return sumOfSquaredDiffrence;
+}
 
+void freeMatrix(double** matrix, int rowNum) {
+    int i;
+    for (i=0; i < rowNum; i++) {
+        free(matrix[i]);
+    }
+}
 
-
+void nullMatrix(int n, double ** p) {
+    int i;
+    for (i = 0; i < n; i++) {
+        p[i] = NULL;
+    }
+}
