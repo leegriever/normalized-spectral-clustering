@@ -1,1 +1,1 @@
-# normalized-spectral-clustering
+# normalized-spectral-clustring-using-Kmeans-
