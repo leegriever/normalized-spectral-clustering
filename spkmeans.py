@@ -1,13 +1,10 @@
 import os
 import sys
 import math
-from tkinter import N
 import numpy as np
 import pandas as pd
 import spkmeansmodule as spkmm 
 
-MAX_ITER = 300
-EPSILON = 0.0
 
 def main():
     np.random.seed(0)
@@ -21,7 +18,9 @@ def main():
     goal = args[2]
     input_filename = args[3]
     
-    k, output_filename = spkmm.execute_program(k, goal, input_filename)    
+    k, output_filename = spkmm.execute_program(k, goal, input_filename)
+    #TODO: delete
+    output_filename = "T_output.txt"    
     print(k)
     if goal == "spk":
         executeStage6(k, output_filename)
@@ -49,7 +48,7 @@ def executeStage6(k, filename):
     print(",".join(str(vIndex) for vIndex in centroidIndices))
     # 2 row print
     # reads file accepted from c 
-    finalCentroids = pd.read_csv(filename, header = None).to_numpy().tolist()
+    finalCentroids = pd.read_csv(kmeans_output_filename, header = None).to_numpy().tolist()
     for i in range(k):
         print(",".join(str(coordinate) for coordinate in finalCentroids[i]))
     # print empty row
@@ -60,7 +59,6 @@ def executeStage6(k, filename):
     os.remove("centroidsFile")
 
 def initializeCentroids(k, n, vectors):
-    np.random.seed(0)
     centroidsIndices = []
     centroids = []
     addToCentroids(n, centroidsIndices, centroids, vectors, None)
@@ -74,7 +72,7 @@ def initializeCentroids(k, n, vectors):
             Dl = sys.float_info.max
             # for each vector, find min distance by checking with all possible centroids
             for j in range(i):
-                Dl  = min(Dl, Distance(vectors[l], centroids[j]))
+                Dl  = min(Dl, euclideanDistance(vectors[l], centroids[j]))
             minDistances.append(Dl)
             sumOfD += Dl 
         # cala p for each vector  
@@ -90,7 +88,7 @@ def addToCentroids(n, centroidsIndices, centroids, vectors, prob):
     centroidsIndices.append(int(randIndex))
     centroids.append(list(vectors[randIndex]))
 
-def Distance(x,y):
+def euclideanDistance(x,y):
     sumOfSquaredDiffrence = 0
     for i in range(len(x)):
         sumOfSquaredDiffrence += math.pow(float(x[i])-float(y[i]),2)
