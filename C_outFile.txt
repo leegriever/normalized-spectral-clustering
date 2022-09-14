@@ -1,6 +1,0 @@
-nan,nan
-nan,nan
-0.7071,0.7071
-nan,nan
-nan,nan
--0.7071,-0.7071
