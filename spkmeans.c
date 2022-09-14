@@ -47,6 +47,8 @@ double DistanceS(double* x, double* y,int dim);
 void freeMatrix(double** matrix, int rowNum);
 void nullMatrix(int n, double ** p);
 
+FILE * file; /* deleteeeeeeeee this file!!!!!! */
+
 /*The Normalized Spectral Clustering Algorithm*/
 SPK_INFO* execute1(int kToCheck, char *goal, char *filename){
 
@@ -113,14 +115,23 @@ SPK_INFO* execute1(int kToCheck, char *goal, char *filename){
     /*creating W*/
     W = matrixAlloc(numOfVec, numOfVec);
     creat_W(W,vectors,numOfVec,dim);
-
+    
     /*goal="wam"*/
     if(strcmp(goal,"wam")==0){
         printf("%i",stage);
         printMatrix(W,numOfVec,numOfVec);
         freeFunc();
+        /* delete everything bellow */
         printf("k before return to python: %d", spk_info->k);
         printf("filename before return to python: %s", spk_info->spk_mat_filename);
+        
+        if ((file = fopen(spk_info->spk_mat_filename, "r"))){
+            fclose(file);
+            printf("file exists");
+        }
+        else{
+            printf("file doesnt exist");
+        }
         return spk_info;
     }
 
@@ -596,16 +607,18 @@ void initSpkInfo(){
         exit(1);
     }
     spk_info->k = 0;
-    spk_info->spk_mat_filename = NULL;
+    spk_info->spk_mat_filename = "C_outFile.txt";
 }
 
  void inputValidity(int k, int n, int d, char *goal) {
     if (d <= 0 || n <= 0 || ( (strcmp(goal, "spk") != 0) && (k < 0 || k > n))){
+        printf("in inputvaliduty");
         printInvalidInput();
     }
     if (((strcmp(goal, "wam") != 0) && (strcmp(goal, "ddg") != 0) &&
     (strcmp(goal, "lnorm") != 0) && (strcmp(goal, "jacobi") != 0) &&
     (strcmp(goal, "spk") != 0))) {
+        printf("in inputvaliduty2");
         printInvalidInput();
     }
 }
@@ -613,12 +626,14 @@ void initSpkInfo(){
 int main(int argc, char *argv[]){
     char* goal;
     if(argc!=3){
+        printf("in main");
         printf("Invalid Input!\n");
         exit(1);
     }
     goal=argv[1];
     if (((strcmp(goal, "wam") != 0) && (strcmp(goal, "ddg") != 0) &&
     (strcmp(goal, "lnorm") != 0) && (strcmp(goal, "jacobi") != 0))) {
+        printf("in main2");
         printf("Invalid Input!\n");
         exit(1);
     }
@@ -636,6 +651,7 @@ void readInput(char *fileName, double **array)
     int row = 0, col = 0;
     array[0][0] = 0;
     if (!(fptr = fopen(fileName, "r"))) {
+        printf("in readInput");
         printInvalidInput();  
     }
     while (fscanf(fptr, "%lf%c", &coordinate, &comma) == 2) {

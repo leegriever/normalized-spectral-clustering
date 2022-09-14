@@ -10,10 +10,13 @@ def main():
     np.random.seed(0)
     args = sys.argv
     if len(args) != 4:
+        print("python main")
         printInvalidInput()
     try:
         k = int(args[1])
+        print(k)
     except:
+        print("here")
         printInvalidInput()
     goal = args[2]
     input_filename = args[3]
@@ -22,9 +25,7 @@ def main():
     print("k:" , k, "filename:", output_filename)
     if goal == "spk":
         executeStage6(k, output_filename)
-        
-    # delete spk file returnes from c
-    os.remove(output_filename)
+            
 
 def executeStage6(k, filename):
     #TODO: check if vecors is what we want
@@ -53,6 +54,7 @@ def executeStage6(k, filename):
     print("")
 
     # delte files
+    os.remove(filename)
     os.remove("vectorsFile")
     os.remove("centroidsFile")
 
