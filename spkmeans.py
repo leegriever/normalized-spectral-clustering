@@ -19,9 +19,7 @@ def main():
     input_filename = args[3]
     
     k, output_filename = spkmm.execute_program(k, goal, input_filename)
-    #TODO: delete
-    output_filename = "T_output.txt"    
-    
+    print("k:" , k, "filename:", output_filename)
     if goal == "spk":
         executeStage6(k, output_filename)
         

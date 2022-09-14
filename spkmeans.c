@@ -50,6 +50,11 @@ void nullMatrix(int n, double ** p);
 /*The Normalized Spectral Clustering Algorithm*/
 SPK_INFO* execute1(int kToCheck, char *goal, char *filename){
 
+    /* deleteeeeeeeee this! */
+    printf("in spkmeans.c: \n");
+    printf("filename: %s\n", filename);
+    printf("k: %d\n", kToCheck);
+
     /*read input*/
     find_numOfVec_and_dim(filename);
     vectors = matrixAlloc(numOfVec, dim);
@@ -114,6 +119,8 @@ SPK_INFO* execute1(int kToCheck, char *goal, char *filename){
         printf("%i",stage);
         printMatrix(W,numOfVec,numOfVec);
         freeFunc();
+        printf("k before return to python: %d", spk_info->k);
+        printf("filename before return to python: %s", spk_info->spk_mat_filename);
         return spk_info;
     }
 
@@ -588,7 +595,7 @@ void initSpkInfo(){
         printf("An Error Has Occured\n");
         exit(1);
     }
-    spk_info->k = 555;
+    spk_info->k = 0;
     spk_info->spk_mat_filename = NULL;
 }
 
